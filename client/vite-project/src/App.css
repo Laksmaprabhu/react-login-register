@@ -1,0 +1,8 @@
+.form-group input,.form-group select{
+  height: 25px;
+  margin-bottom: 10px;
+}
+.registration-section{
+  width:250px;
+  margin: 0 auto;
+}
