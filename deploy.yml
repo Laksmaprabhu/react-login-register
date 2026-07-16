@@ -1,0 +1,92 @@
+name: React CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+
+  # ------------------------
+  # Build Job
+  # ------------------------
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm test -- --watchAll=false
+
+      - name: Build Application
+        run: npm run build
+
+  # ------------------------
+  # Deploy to Staging
+  # ------------------------
+  deploy-staging:
+    needs: build
+
+    if: github.ref == 'refs/heads/develop'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+
+          script: |
+            cd /var/www/react-app
+            git pull origin develop
+            npm install
+            npm run build
+            pm2 restart react-app
+
+  # ------------------------
+  # Deploy to Production
+  # ------------------------
+  deploy-production:
+    needs: build
+
+    if: github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+          script: |
+            cd /var/www/react-app
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart react-app

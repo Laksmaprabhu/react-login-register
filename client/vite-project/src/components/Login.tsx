@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -8,6 +8,19 @@ const Login = () => {
         password:""
     })
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const token = searchParams.get("token");
+        const role = searchParams.get("role");
+
+        if (token && role) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("userrole", role);
+            navigate("/dashboard");
+        }
+    }, [searchParams, navigate]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const {name, value} = e.target;
@@ -29,6 +42,9 @@ const Login = () => {
             console.log(err);
         }
     }
+    const googleLogin = () => {
+    window.location.href = "http://localhost:5000/api/users/google";
+}
     return(
         <>
         <div className="heading-section">
@@ -43,6 +59,9 @@ const Login = () => {
                 </div>
                 <button type="submit">Login</button>
             </form>
+            <button onClick={googleLogin}>
+    Continue with Google
+</button>
         </>
     )
 }

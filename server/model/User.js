@@ -12,11 +12,15 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: true
+            required: false
         },
         role: {
             type: String,
-            required: true
+            default: "admin"
+        },
+        order: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Order"
         }
     },
     {timestamps: true}

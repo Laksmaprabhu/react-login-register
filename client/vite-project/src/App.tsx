@@ -7,7 +7,7 @@ import UserList from './components/Userlist'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import ProtectedRoute from './components/Protectedroute'
-
+import OAuthSuccess from './components/oauthsuccess'
 function App() {
 
 
@@ -21,6 +21,10 @@ function App() {
         <Route element={<ProtectedRoute />}>      
         <Route path='/users' element={<UserList />}></Route>        
         <Route path="/dashboard" element={<Dashboard />}></Route>
+         <Route
+        path="/oauth-success"
+        element={<OAuthSuccess />}
+    />
         </Route>
       </Routes>
      </Router>
@@ -28,4 +32,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
