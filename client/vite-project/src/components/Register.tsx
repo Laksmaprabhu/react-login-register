@@ -66,7 +66,7 @@ const Register = () => {
                         <option value="contractor">Contractor</option>
                     </select>
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Save</button>
             </form>
             <Link to="/users">View users</Link>
             <div className="login-page-link">
