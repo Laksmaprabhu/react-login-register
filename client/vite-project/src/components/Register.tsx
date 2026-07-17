@@ -68,7 +68,7 @@ const Register = () => {
                 </div>
                 <button type="submit">Submit</button>
             </form>
-            <Link to="/users">View registered users</Link>
+            <Link to="/users">View users</Link>
             <div className="login-page-link">
                 <Link to="/login">Login</Link>
             </div>
